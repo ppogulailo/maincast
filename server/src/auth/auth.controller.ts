@@ -1,3 +1,4 @@
+import { Response } from 'express';
 import {
   Body,
   Controller,
@@ -7,65 +8,61 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { Response } from 'express';
+import { RequestModel } from '../common/types/request.type';
+import { COOKIE_DENIED, JWT_DENIED } from './auth.constants';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  async signup(
+  async signUp(
     @Body() createUserDto: CreateUserDto,
     @Res({ passthrough: true }) response: Response,
   ) {
     const jwt = await this.authService.signUp(createUserDto);
-    response.cookie('jwt', jwt, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-    return { jwt: jwt.tokens, id: jwt.id };
+    this.setJwtCookie(response, jwt);
   }
 
   @Post('signin')
-  async signin(
+  async signIn(
     @Body() data: AuthDto,
     @Res({ passthrough: true }) response: Response,
   ) {
     const jwt = await this.authService.signIn(data);
-    response.cookie('jwt', jwt, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-    return { jwt: jwt.tokens.accessToken, id: jwt.id };
+    this.setJwtCookie(response, jwt);
   }
 
   @Get('logout')
-  async logout(@Req() req: any) {
+  async logout(@Req() req: RequestModel) {
     await this.authService.logout(req.user['sub']);
   }
 
   @Get('refresh')
   async refreshTokens(
-    @Req() request: any,
+    @Req() request: RequestModel,
     @Res({ passthrough: true }) response: Response,
   ) {
     if (!request.cookies.jwt) {
-      throw new ForbiddenException('Cookie Denied');
+      throw new ForbiddenException(COOKIE_DENIED);
     }
     const jwt = await this.authService.refreshTokens(
       request.cookies.jwt.id,
       request.cookies.jwt.tokens.refreshToken,
     );
     if (!jwt) {
-      throw new ForbiddenException('Jwt Denied');
+      throw new ForbiddenException(JWT_DENIED);
     }
+    this.setJwtCookie(response, jwt);
+  }
+
+  private setJwtCookie(response: Response, jwt): void {
     response.cookie('jwt', jwt, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-    return jwt.tokens.accessToken;
   }
 }
