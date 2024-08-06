@@ -6,6 +6,7 @@ import {
 import { NextFunction, Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { UserService } from '../../users/users.service';
+import { RequestModel } from '../types/request.type';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -14,7 +15,7 @@ export class AuthMiddleware implements NestMiddleware {
     private readonly userService: UserService,
   ) {}
 
-  async use(req: Request, _: Response, next: NextFunction) {
+  async use(req: RequestModel, _: Response, next: NextFunction) {
     try {
       const token = req.cookies?.jwt?.accessToken;
       if (!token) {

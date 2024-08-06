@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  task-api:
+    build:
+      context: server
+      dockerfile: Dockerfile
+    container_name: task-api
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/db_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB_FILE: /run/secrets/db_name
+    secrets:
+      - db_user
+      - db_password
+      - db_name
+    env_file:
+      - ./server/.env.example
+  postgres:
+    image: postgres:10.4
+    restart: always
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/db_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB_FILE: /run/secrets/db_name
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    secrets:
+      - db_user
+      - db_password
+      - db_name
+
+secrets:
+  db_user:
+    file: ./secrets/db_user
+  db_password:
+    file: ./secrets/db_password
+  db_name:
+    file: ./secrets/db_name
+
+volumes:
+  postgres:
+    name: nest-prisma-docker-db
