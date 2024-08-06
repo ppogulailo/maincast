@@ -9,5 +9,5 @@ export default (configService: ConfigService): TypeOrmModuleOptions => ({
   password: configService.get('TYPEORM_PASSWORD'),
   database: configService.get<string>('TYPEORM_DATABASE'),
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  synchronize: false,
+  synchronize: true,
 });
