@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { TaskApi } from '@/api/task.api.ts'
-import { ITask } from '@/interfaces/task.interfaces.ts'
+import { ITask, TaskStatus } from '@/interfaces/task.interfaces.ts'
 import { ResponseError } from '@/interfaces/response-error.interfaces.ts'
 import { IRejectedValue } from '@/interfaces/thunk.interfaces.ts'
 
@@ -41,12 +41,15 @@ export const updateTask = createAsyncThunk<ITask, Omit<ITask, 'text'>, IRejected
         }
     },
 )
-export const getTasks = createAsyncThunk('task/get', async (_, { rejectWithValue }) => {
-    try {
-        const response = await TaskApi.getAll()
-        return response.data
-    } catch (e) {
-        const error = e as ResponseError
-        return rejectWithValue(error.response?.data || 'Unknown error')
-    }
-})
+export const getTasks = createAsyncThunk<ITask[], TaskStatus | undefined, IRejectedValue>(
+    'task/get',
+    async (status, { rejectWithValue }) => {
+        try {
+            const response = await TaskApi.getAll(status)
+            return response.data
+        } catch (e) {
+            const error = e as ResponseError
+            return rejectWithValue(error.response?.data || 'Unknown error')
+        }
+    },
+)

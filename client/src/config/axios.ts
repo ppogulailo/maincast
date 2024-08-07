@@ -1,10 +1,8 @@
 import axios from 'axios'
-// import dotenv from 'dotenv'
-// dotenv.config()
 
 export const $api = axios.create({
     withCredentials: true,
-    baseURL: 'http://localhost:8000/api',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
     headers: { 'Content-Type': 'application/json' },
 })
 // $api.interceptors.request.use((config: AxiosRequestConfig) => {
@@ -24,8 +22,12 @@ $api.interceptors.response.use(
                 await $api('/auth/refresh')
                 return $api.request(originalRequest)
             } catch (e) {
+                localStorage.removeItem('isAuth')
                 console.log('User not autorized')
             }
+        }
+        if (error?.response?.status == 401) {
+            window.location.href = '/login'
         }
         throw error
     },
