@@ -5,8 +5,9 @@ import { useAppDispatch } from '@/redux'
 import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
 import { createTask, deleteTask, getTasks, updateTask } from '@/redux/thunks/task.thunk.ts'
 import { ITaskCreate, TaskStatus } from '@/interfaces/task.interfaces.ts'
+import { getStatusClass } from '@/utils/taskStatusUtils.ts'
 
-Modal.setAppElement('#root') // Установка головного елемента для доступності модальних вікон
+Modal.setAppElement('#root')
 
 const TaskPage: React.FC = () => {
     const tasks = useTypeSelector(state => state.tasks.tasks)
@@ -35,20 +36,6 @@ const TaskPage: React.FC = () => {
     useEffect(() => {
         fetchTasks()
     }, [])
-
-    const getStatusClass = (status: TaskStatus) => {
-        switch (status) {
-            case TaskStatus.DONE:
-                return 'bg-green-200'
-            case TaskStatus.PROCESS:
-                return 'bg-yellow-200'
-            case TaskStatus.BACKLOG:
-                return 'bg-red-200'
-            case TaskStatus.NONE:
-            default:
-                return 'bg-gray-200'
-        }
-    }
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Tasks</h1>
