@@ -21,7 +21,7 @@ export class AuthService {
         private readonly configService: ConfigService,
     ) {}
 
-    async signUp(createUserDto: CreateUserDto): Promise<any> {
+    async signUp(createUserDto: CreateUserDto) {
         const userExists = await this.userService.findByEmail(createUserDto.email)
         if (userExists) {
             throw new BadRequestException(ALREADY_USER_ERROR)
@@ -87,7 +87,7 @@ export class AuthService {
             this.jwtService.signAsync(
                 { sub: userId, email },
                 {
-                    secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+                    secret: this.configService.get('JWT_ACCESS_SECRET'),
                     expiresIn: this.configService.get('JWT_ACCESS_EXPIRED'),
                 },
             ),
