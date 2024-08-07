@@ -1,6 +1,6 @@
-import { $api } from '../config/axios'
 import { AxiosResponse } from 'axios'
 import { ILogin, IRegister } from '@/interfaces/auth.interfaces.ts'
+import { $api } from '../config/axios'
 
 export const AuthApi = {
     register: (body: IRegister): Promise<AxiosResponse<never>> => {

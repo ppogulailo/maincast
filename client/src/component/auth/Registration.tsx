@@ -16,17 +16,16 @@ export const Registration = () => {
     const isAuth = useTypeSelector(state => state.auth.isAuth)
     const navigate = useNavigate()
 
-    const Register = async ({ email, name, password }: IRegister) => {
+    const handleSignUp = async ({ email, name, password }: IRegister) => {
         await dispatch(signUp({ email, password, name }))
         if (isAuth) {
             navigate('/')
         }
     }
-
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <form onSubmit={handleSubmit(Register)} className="space-y-6">
+                <form onSubmit={handleSubmit(handleSignUp)} className="space-y-6">
                     <div className="text-2xl font-bold text-center mb-4">Sign up</div>
                     <div>
                         <input

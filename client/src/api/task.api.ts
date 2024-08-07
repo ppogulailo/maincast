@@ -1,5 +1,5 @@
-import { $api } from '../config/axios'
 import { AxiosResponse } from 'axios'
+import { $api } from '../config/axios'
 import { ITask, ITaskCreate } from '@/interfaces/task.interfaces.ts'
 
 export const TaskApi = {
