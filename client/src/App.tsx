@@ -1,7 +1,7 @@
-import './App.css'
+import './index.css'
 
 function App() {
-    return <>MainCast</>
+    return <div className="mt-10 bg-red-400">MainCast</div>
 }
 
 export default App
