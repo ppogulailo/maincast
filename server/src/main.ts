@@ -6,13 +6,13 @@ import { ValidationPipe } from '@nestjs/common'
 import * as cookieParser from 'cookie-parser'
 
 async function bootstrap() {
-    const corsOrigin = {
-        origin: 'http://localhost:4000', //or whatever port your frontend is using
-        credentials: true,
-    }
     const app = await NestFactory.create(AppModule)
 
-    app.enableCors(corsOrigin)
+    // todo: change origin to your url address
+    app.enableCors({
+        credentials: true,
+        origin: /http:\/\/.*/,
+    })
     app.setGlobalPrefix('api')
 
     const config = new DocumentBuilder().setTitle('Maincast').build()

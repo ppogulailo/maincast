@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  task-api:
+    build:
+      context: server
+      dockerfile: Dockerfile
+    container_name: task-api
+    restart: always
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgres
+    env_file:
+      - ./server/.env
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - task-api
+
+  postgres:
+    image: postgres:10.4
+    restart: always
+    # todo: change to .env
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
+    name: nest-prisma-docker-db

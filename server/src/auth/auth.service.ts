@@ -1,5 +1,11 @@
 import * as argon2 from 'argon2'
-import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+    BadRequestException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { AuthDto } from './dto/auth.dto'
@@ -33,11 +39,11 @@ export class AuthService {
     async signIn(data: AuthDto) {
         const user = await this.userService.findByEmail(data.email)
         if (!user) {
-            throw new UnauthorizedException(USER_NOT_FOUND)
+            throw new NotFoundException(USER_NOT_FOUND)
         }
         const passwordMatches = await argon2.verify(user.password, data.password)
         if (!passwordMatches) {
-            throw new UnauthorizedException(USER_WRONG_PASSWORD)
+            throw new ForbiddenException(USER_WRONG_PASSWORD)
         }
         const tokens = await this.getTokens(user.id, user.email)
         await this.updateRefreshToken(user.id, tokens.refreshToken)
