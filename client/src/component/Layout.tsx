@@ -2,7 +2,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { logout } from '@/redux/thunks/auth.thunk.ts'
 import { useAppDispatch } from '@/redux'
 
-const Layout = (): JSX.Element => {
+const Layout = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const handleLogout = () => {
