@@ -7,6 +7,7 @@ import {
 import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
 import { useAppDispatch } from '@/redux'
 import { signUp } from '@/redux/thunks/auth.thunk.ts'
+import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
 
 interface IFormInputs {
     name: string
@@ -20,10 +21,12 @@ export const Registration = () => {
         formState: { errors },
     } = useForm<IFormInputs>()
     const dispatch = useAppDispatch()
+    const isAuth = useTypeSelector(state => state.auth.isAuth)
     const navigate = useNavigate()
+
     const Register = async ({ email, name, password }: IFormInputs) => {
         await dispatch(signUp({ email, password, name }))
-        if (localStorage.getItem('isAuth')) {
+        if (isAuth) {
             navigate('/')
         }
     }

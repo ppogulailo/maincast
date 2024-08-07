@@ -14,7 +14,6 @@ export const signUp = createAsyncThunk<
 >('auth/register', async (body, { rejectWithValue }) => {
     try {
         const response = await AuthApi.register(body)
-        console.log(response.data)
         return response.data
     } catch (e) {
         const error = e as ResponseError
