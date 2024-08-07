@@ -3,9 +3,11 @@ import { useDispatch } from 'react-redux'
 import { persistStore, persistReducer, FLUSH, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import authReducer from '@/redux/reducer/auth.reducer.ts'
+import taskReducer from '@/redux/reducer/task.reducer.ts'
 
 const reducers = combineReducers({
     auth: authReducer,
+    tasks: taskReducer,
 })
 
 // [apiSlice.reducerPath]: apiSlice.reducer

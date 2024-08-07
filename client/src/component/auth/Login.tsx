@@ -20,9 +20,7 @@ export const Login = () => {
         formState: { errors },
     } = useForm<IFormInputs>()
     const dispatch = useAppDispatch()
-    // const navigate = useNavigate()
     const Login = async (form: IFormInputs) => {
-        console.log(form)
         await dispatch(signIn({ email: form.email, password: form.password }))
     }
 

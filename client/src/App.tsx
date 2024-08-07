@@ -2,7 +2,7 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import { Login } from '@/component/auth/Login.tsx'
 import { Registration } from '@/component/auth/Registration.tsx'
 import { RequireAuth } from '@/component/hoc/RequireAuth.tsx'
-import { TasksPage } from '@/component/tasks/Tasks.tsx'
+import { TaskPage } from '@/component/tasks/Tasks.tsx'
 import { NotFountPage } from '@/component/NotFound.tsx'
 
 const router = createBrowserRouter(
@@ -14,7 +14,7 @@ const router = createBrowserRouter(
                 path="/"
                 element={
                     <RequireAuth>
-                        <TasksPage />
+                        <TaskPage />
                     </RequireAuth>
                 }
             />
