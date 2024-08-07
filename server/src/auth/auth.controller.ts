@@ -25,7 +25,7 @@ export class AuthController {
     }
 
     @Get('logout')
-    async logout(@Req() req: RequestModel, @Res({ passthrough: true }) response: Response, @User() user: UserEntity) {
+    async logout(@Res({ passthrough: true }) response: Response, @User() user: UserEntity) {
         response.clearCookie('jwt', { path: '/' })
         await this.authService.logout(user.id)
         return 'Logout successful'
