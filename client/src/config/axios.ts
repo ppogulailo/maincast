@@ -24,9 +24,11 @@ $api.interceptors.response.use(
                 await $api('/auth/refresh')
                 return $api.request(originalRequest)
             } catch (e) {
+                localStorage.removeItem('isAuth')
                 console.log('User not autorized')
             }
         }
+        window.location.href = '/login'
         throw error
     },
 )
