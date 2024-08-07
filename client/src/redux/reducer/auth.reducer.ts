@@ -15,14 +15,14 @@ const itemSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(signUp.fulfilled, state => {
-                state.isAuth = true
+            .addCase(signUp.fulfilled, () => {
+                localStorage.setItem('isAuth', '_')
             })
-            .addCase(signIn.fulfilled, state => {
-                state.isAuth = true
+            .addCase(signIn.fulfilled, () => {
+                localStorage.setItem('isAuth', '_')
             })
-            .addCase(logout.fulfilled, state => {
-                state.isAuth = false
+            .addCase(logout.fulfilled, () => {
+                localStorage.removeItem('isAuth')
             })
             .addMatcher(isError, (state, { payload }: PayloadAction<{ message: string }>) => {
                 state.error = payload.message

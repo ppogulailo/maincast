@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
 import { useAppDispatch } from '@/redux'
 import { signUp } from '@/redux/thunks/auth.thunk.ts'
-import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
 import { IRegister } from '@/interfaces/auth.interfaces.ts'
 
 export const Registration = () => {
@@ -13,12 +12,11 @@ export const Registration = () => {
         formState: { errors },
     } = useForm<IRegister>()
     const dispatch = useAppDispatch()
-    const isAuth = useTypeSelector(state => state.auth.isAuth)
     const navigate = useNavigate()
 
     const handleSignUp = async ({ email, name, password }: IRegister) => {
         await dispatch(signUp({ email, password, name }))
-        if (isAuth) {
+        if (localStorage.getItem('isAuth')) {
             navigate('/')
         }
     }

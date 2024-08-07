@@ -6,12 +6,14 @@ import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
 import { createTask, deleteTask, getTasks, updateTask } from '@/redux/thunks/task.thunk.ts'
 import { ITaskCreate, TaskStatus } from '@/interfaces/task.interfaces.ts'
 import { getStatusClass } from '@/utils/taskStatusUtils.ts'
+import { useSearchParams } from 'react-router-dom'
 
 Modal.setAppElement('#root')
 
 const TaskPage: React.FC = () => {
     const tasks = useTypeSelector(state => state.tasks.tasks)
     const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [searchParams, setSearchParams] = useSearchParams()
     const {
         register,
         handleSubmit,
@@ -19,8 +21,8 @@ const TaskPage: React.FC = () => {
     } = useForm<ITaskCreate>()
     const dispatch = useAppDispatch()
 
-    const fetchTasks = async () => {
-        await dispatch(getTasks())
+    const fetchTasks = async (status?: TaskStatus) => {
+        await dispatch(getTasks(status))
     }
     const handleCreateTask = async ({ text }: { text: string }) => {
         dispatch(createTask(text))
@@ -32,9 +34,14 @@ const TaskPage: React.FC = () => {
     const handleDeleteTask = async (id: number) => {
         dispatch(deleteTask({ id }))
     }
+    const handleStatusFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const status = event.target.value as TaskStatus
+        setSearchParams(status ? { status } : {})
+        fetchTasks(status)
+    }
 
     useEffect(() => {
-        fetchTasks()
+        fetchTasks(searchParams.get('status') as TaskStatus)
     }, [])
     return (
         <div className="p-6">
@@ -42,6 +49,18 @@ const TaskPage: React.FC = () => {
             <button className="bg-blue-500 text-white p-2 rounded mb-4" onClick={() => setModalIsOpen(true)}>
                 Create Task
             </button>
+            <select
+                value={searchParams.get('status') || ''}
+                onChange={handleStatusFilterChange}
+                className="p-2 border rounded"
+            >
+                <option value="">All</option>
+                {Object.values(TaskStatus).map(status => (
+                    <option key={status} value={status}>
+                        {status}
+                    </option>
+                ))}
+            </select>
             <ul className="space-y-2">
                 {tasks.map(task => (
                     <li

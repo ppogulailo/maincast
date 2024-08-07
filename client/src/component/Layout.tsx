@@ -7,6 +7,7 @@ const Layout = () => {
     const navigate = useNavigate()
     const handleLogout = () => {
         dispatch(logout())
+        localStorage.removeItem('isAuth')
         navigate('/')
     }
 

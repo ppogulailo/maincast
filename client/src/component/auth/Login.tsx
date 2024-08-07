@@ -4,7 +4,6 @@ import { useAppDispatch } from '@/redux'
 import { signIn } from '@/redux/thunks/auth.thunk.ts'
 import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
 import { ILogin } from '@/interfaces/auth.interfaces.ts'
-import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
 
 export const Login = () => {
     const {
@@ -14,12 +13,11 @@ export const Login = () => {
         trigger,
     } = useForm<ILogin>()
     const dispatch = useAppDispatch()
-    const isAuth = useTypeSelector(state => state.auth.isAuth)
     const navigate = useNavigate()
 
     const handleSignIn = async (form: ILogin) => {
         await dispatch(signIn({ email: form.email, password: form.password }))
-        if (isAuth) {
+        if (localStorage.getItem('isAuth')) {
             navigate('/')
         }
     }
