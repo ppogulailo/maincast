@@ -1,6 +1,6 @@
 import { createSlice, isFulfilled } from '@reduxjs/toolkit'
 import { isError, isPendingAction } from '@/redux/actions/action.ts'
-// import { checkAuth, logout, signIn, signUp } from '@/redux/thunks/auth.thunk.ts'
+import { logout, signIn, signUp } from '@/redux/thunks/auth.thunk.ts'
 export interface IAuthState {
     error: string | null
     isLoading: boolean | null
@@ -19,6 +19,15 @@ const itemSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder
+            .addCase(signUp.fulfilled, state => {
+                state.isAuth = true
+            })
+            .addCase(signIn.fulfilled, state => {
+                state.isAuth = true
+            })
+            .addCase(logout.fulfilled, state => {
+                state.isAuth = false
+            })
             .addMatcher(isError, (state, { payload }) => {
                 state.error = payload.message
                 state.isLoading = false
@@ -28,7 +37,6 @@ const itemSlice = createSlice({
                 state.isLoading = true
             })
             .addMatcher(isFulfilled, state => {
-                state.isAuth = true
                 state.isLoading = false
             })
     },

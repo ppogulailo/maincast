@@ -30,11 +30,8 @@ const itemSlice = createSlice({
                 state.tasks.push(payload)
             })
             .addCase(updateTask.fulfilled, (state, { payload }) => {
-                console.log(payload.id)
                 const index = state.tasks.findIndex(task => task.id === payload.id)
-                console.log(index)
                 if (index !== -1) {
-                    console.log(payload)
                     state.tasks[index] = payload
                 }
             })

@@ -23,9 +23,9 @@ export const AuthApi = {
         return $api.post(`/auth/signin`, body)
     },
     checkAuth: (): Promise<AxiosResponse<string>> => {
-        return $api.get(`/auth/refresh`, { withCredentials: true })
+        return $api.get(`/auth/refresh`)
     },
     logOut: () => {
-        return $api.get(`/auth/logout`, { withCredentials: true })
+        return $api.get(`/auth/logout`)
     },
 }
