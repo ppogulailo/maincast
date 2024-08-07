@@ -1,12 +1,8 @@
-import { createSlice, isFulfilled } from '@reduxjs/toolkit'
+import { createSlice, isFulfilled, PayloadAction } from '@reduxjs/toolkit'
 import { isError, isPendingAction } from '@/redux/actions/action.ts'
 import { logout, signIn, signUp } from '@/redux/thunks/auth.thunk.ts'
-export interface IAuthState {
-    error: string | null
-    isLoading: boolean | null
-    isAuth: boolean | null
-    id: string | null
-}
+import { IAuthState } from '@/interfaces/auth.interfaces.ts'
+
 const initialState: IAuthState = {
     isAuth: null,
     isLoading: null,
@@ -28,7 +24,7 @@ const itemSlice = createSlice({
             .addCase(logout.fulfilled, state => {
                 state.isAuth = false
             })
-            .addMatcher(isError, (state, { payload }) => {
+            .addMatcher(isError, (state, { payload }: PayloadAction<{ message: string }>) => {
                 state.error = payload.message
                 state.isLoading = false
             })

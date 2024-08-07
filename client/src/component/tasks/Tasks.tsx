@@ -4,67 +4,38 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch } from '@/redux'
 import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
 import { createTask, deleteTask, getTasks, updateTask } from '@/redux/thunks/task.thunk.ts'
+import { ITaskCreate, TaskStatus } from '@/interfaces/task.interfaces.ts'
 
 Modal.setAppElement('#root') // Установка головного елемента для доступності модальних вікон
-
-interface IFormInputs {
-    text: string
-}
 
 const TaskPage: React.FC = () => {
     const tasks = useTypeSelector(state => state.tasks.tasks)
     const [modalIsOpen, setModalIsOpen] = useState(false)
-
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IFormInputs>()
+    } = useForm<ITaskCreate>()
     const dispatch = useAppDispatch()
 
     const fetchTasks = async () => {
-        try {
-            await dispatch(getTasks({}))
-        } catch (error) {
-            console.error('Failed to fetch tasks', error)
-        }
+        await dispatch(getTasks())
+    }
+    const handleCreateTask = async ({ text }: { text: string }) => {
+        dispatch(createTask(text))
+        setModalIsOpen(false)
+    }
+    const handleUpdateTask = async (id: number, status: string) => {
+        dispatch(updateTask({ id, status }))
+    }
+    const handleDeleteTask = async (id: number) => {
+        dispatch(deleteTask({ id }))
     }
 
     useEffect(() => {
         fetchTasks()
     }, [])
 
-    const handleCreateTask = async ({ text }: { text: string }) => {
-        try {
-            dispatch(createTask(text))
-            setModalIsOpen(false)
-        } catch (error) {
-            console.error('Failed to create task', error)
-        }
-    }
-
-    const handleUpdateTask = async (id: number, status: string) => {
-        try {
-            console.log(id, status)
-            dispatch(updateTask({ id, status }))
-        } catch (error) {
-            console.error('Failed to update task', error)
-        }
-    }
-
-    const handleDeleteTask = async (id: number) => {
-        try {
-            dispatch(deleteTask({ id }))
-        } catch (error) {
-            console.error('Failed to delete task', error)
-        }
-    }
-    enum TaskStatus {
-        DONE = 'done',
-        PROCESS = 'process',
-        BACKLOG = 'backlog',
-        NONE = 'none',
-    }
     const getStatusClass = (status: TaskStatus) => {
         switch (status) {
             case TaskStatus.DONE:
@@ -113,7 +84,6 @@ const TaskPage: React.FC = () => {
                     </li>
                 ))}
             </ul>
-
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}

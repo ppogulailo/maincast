@@ -1,13 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { TaskApi } from '@/api/task.api.ts'
+import { ITask } from '@/interfaces/task.interfaces.ts'
+import { ResponseError } from '@/interfaces/response-error.interfaces.ts'
+import { IRejectedValue } from '@/interfaces/thunk.interfaces.ts'
 
-interface ResponseError {
-    response?: {
-        data: string
-    }
-}
-
-export const createTask = createAsyncThunk<any, string, { rejectValue: string }>(
+export const createTask = createAsyncThunk<ITask, string, IRejectedValue>(
     'task/create',
     async (text, { rejectWithValue }) => {
         try {
@@ -20,7 +17,7 @@ export const createTask = createAsyncThunk<any, string, { rejectValue: string }>
     },
 )
 
-export const deleteTask = createAsyncThunk<any, { id: number }, { rejectValue: string }>(
+export const deleteTask = createAsyncThunk<number, Pick<ITask, 'id'>, IRejectedValue>(
     'task/delete',
     async ({ id }, { rejectWithValue }) => {
         try {
@@ -32,7 +29,7 @@ export const deleteTask = createAsyncThunk<any, { id: number }, { rejectValue: s
         }
     },
 )
-export const updateTask = createAsyncThunk<any, { id: number; status: string }, { rejectValue: string }>(
+export const updateTask = createAsyncThunk<ITask, Omit<ITask, 'text'>, IRejectedValue>(
     'task/update',
     async ({ id, status }, { rejectWithValue }) => {
         try {
@@ -44,15 +41,12 @@ export const updateTask = createAsyncThunk<any, { id: number; status: string }, 
         }
     },
 )
-export const getTasks = createAsyncThunk<any, {}, { rejectValue: string }>(
-    'task/get',
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await TaskApi.getAll()
-            return response.data
-        } catch (e) {
-            const error = e as ResponseError
-            return rejectWithValue(error.response?.data || 'Unknown error')
-        }
-    },
-)
+export const getTasks = createAsyncThunk('task/get', async (_, { rejectWithValue }) => {
+    try {
+        const response = await TaskApi.getAll()
+        return response.data
+    } catch (e) {
+        const error = e as ResponseError
+        return rejectWithValue(error.response?.data || 'Unknown error')
+    }
+})

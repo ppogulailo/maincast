@@ -1,28 +1,15 @@
 import { $api } from '../config/axios'
 import { AxiosResponse } from 'axios'
-export interface IRegister {
-    email: string
-    password: string
-    name: string
-}
+import { ILogin, IRegister } from '@/interfaces/auth.interfaces.ts'
 
-export interface ILogin {
-    email: string
-    password: string
-}
-
-export interface AuthResponse {
-    jwt: string
-    id: string
-}
 export const AuthApi = {
-    register: (body: IRegister): Promise<AxiosResponse<AuthResponse>> => {
+    register: (body: IRegister): Promise<AxiosResponse<never>> => {
         return $api.post(`/auth/signup`, body)
     },
-    login: (body: ILogin): Promise<AxiosResponse<AuthResponse>> => {
+    login: (body: ILogin): Promise<AxiosResponse<never>> => {
         return $api.post(`/auth/signin`, body)
     },
-    checkAuth: (): Promise<AxiosResponse<string>> => {
+    checkAuth: (): Promise<AxiosResponse<never>> => {
         return $api.get(`/auth/refresh`)
     },
     logOut: () => {

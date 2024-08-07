@@ -1,14 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { AuthApi, AuthResponse } from '@/api/auth.api.ts'
-
-interface ResponseError {
-    response?: {
-        data: string
-    }
-}
+import { AuthApi } from '@/api/auth.api.ts'
+import { ResponseError } from '@/interfaces/response-error.interfaces.ts'
 
 export const signUp = createAsyncThunk<
-    AuthResponse,
+    void,
     { email: string; password: string; name: string },
     { rejectValue: string }
 >('auth/register', async (body, { rejectWithValue }) => {
@@ -21,7 +16,7 @@ export const signUp = createAsyncThunk<
     }
 })
 
-export const signIn = createAsyncThunk<AuthResponse, { email: string; password: string }, { rejectValue: string }>(
+export const signIn = createAsyncThunk<void, { email: string; password: string }, { rejectValue: string }>(
     'auth/login',
     async (body, { rejectWithValue }) => {
         try {

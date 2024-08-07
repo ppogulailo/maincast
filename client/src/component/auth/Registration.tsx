@@ -1,30 +1,22 @@
 import { useForm } from 'react-hook-form'
-import {
-    Link,
-    useNavigate,
-    // useNavigate
-} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
 import { useAppDispatch } from '@/redux'
 import { signUp } from '@/redux/thunks/auth.thunk.ts'
 import { useTypeSelector } from '@/hooks/useTypeSelector.ts'
+import { IRegister } from '@/interfaces/auth.interfaces.ts'
 
-interface IFormInputs {
-    name: string
-    email: string
-    password: string
-}
 export const Registration = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IFormInputs>()
+    } = useForm<IRegister>()
     const dispatch = useAppDispatch()
     const isAuth = useTypeSelector(state => state.auth.isAuth)
     const navigate = useNavigate()
 
-    const Register = async ({ email, name, password }: IFormInputs) => {
+    const Register = async ({ email, name, password }: IRegister) => {
         await dispatch(signUp({ email, password, name }))
         if (isAuth) {
             navigate('/')

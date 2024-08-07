@@ -1,14 +1,9 @@
-import { createSlice, isFulfilled } from '@reduxjs/toolkit'
+import { createSlice, isFulfilled, PayloadAction } from '@reduxjs/toolkit'
 import { isError, isPendingAction } from '@/redux/actions/action.ts'
-import { ITask } from '@/api/task.api.ts'
 import { createTask, getTasks, deleteTask, updateTask } from '@/redux/thunks/task.thunk.ts'
-interface IAuthState {
-    error: string | null
-    isLoading: boolean | null
-    tasks: ITask[]
-    id: number | null
-}
-const initialState: IAuthState = {
+import { ITaskState } from '@/interfaces/task.interfaces.ts'
+
+const initialState: ITaskState = {
     isLoading: null,
     error: null,
     id: null,
@@ -35,7 +30,7 @@ const itemSlice = createSlice({
                     state.tasks[index] = payload
                 }
             })
-            .addMatcher(isError, (state, { payload }) => {
+            .addMatcher(isError, (state, { payload }: PayloadAction<{ message: string }>) => {
                 state.error = payload.message
                 state.isLoading = false
             })
