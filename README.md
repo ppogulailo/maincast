@@ -3,6 +3,10 @@
 Список не виконаних задач:
 •	Контенерезуйте застосунок за допомогою Docker.
 
+
+# How to start application
+- #### Setup `.env` for `client` & `server`
+
 ## Frontend
 - `cd client`
 - `npm i`
