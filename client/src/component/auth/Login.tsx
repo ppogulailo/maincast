@@ -4,7 +4,8 @@ import {
 } from 'react-router-dom'
 // import { useAppDispatch } from '../../redux'
 import { useForm } from 'react-hook-form'
-import { emailValidation, passwordValidation } from '../../config/validation/validation.ts'
+import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
+
 interface IFormInputs {
     email: string
     password: string

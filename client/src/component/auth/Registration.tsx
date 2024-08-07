@@ -3,7 +3,7 @@ import {
     Link,
     // useNavigate
 } from 'react-router-dom'
-import { emailValidation, passwordValidation } from '../../config/validation/validation.ts'
+import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
 
 interface IFormInputs {
     name: string

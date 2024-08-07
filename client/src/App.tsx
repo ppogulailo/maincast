@@ -1,13 +1,23 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
-import { NotFountPage } from './component/NotFound.tsx'
-import { Login } from './component/auth/Login.tsx'
-import { Registration } from './component/auth/Registration.tsx'
+import { Login } from '@/component/auth/Login.tsx'
+import { Registration } from '@/component/auth/Registration.tsx'
+import { RequireAuth } from '@/component/hoc/RequireAuth.tsx'
+import { TasksPage } from '@/component/tasks/Tasks.tsx'
+import { NotFountPage } from '@/component/NotFound.tsx'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
+            <Route
+                path="/"
+                element={
+                    <RequireAuth>
+                        <TasksPage />
+                    </RequireAuth>
+                }
+            />
             <Route path="*" element={<NotFountPage />} />
         </Route>,
     ),
