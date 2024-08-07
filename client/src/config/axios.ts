@@ -1,10 +1,10 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
-dotenv.config()
+// import dotenv from 'dotenv'
+// dotenv.config()
 
 export const $api = axios.create({
     withCredentials: true,
-    baseURL: process.env.API_URL,
+    baseURL: 'http://localhost:8000/api',
     headers: { 'Content-Type': 'application/json' },
 })
 // $api.interceptors.request.use((config: AxiosRequestConfig) => {

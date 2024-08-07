@@ -5,6 +5,8 @@ import {
 // import { useAppDispatch } from '../../redux'
 import { useForm } from 'react-hook-form'
 import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
+import { useAppDispatch } from '@/redux'
+import { signIn } from '@/redux/thunks/auth.thunk.ts'
 
 interface IFormInputs {
     email: string
@@ -17,11 +19,11 @@ export const Login = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<IFormInputs>()
-    // const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
     // const navigate = useNavigate()
     const Login = async (form: IFormInputs) => {
         console.log(form)
-        // await dispatch(signin({ email: form.email, password: form.password }))
+        await dispatch(signIn({ email: form.email, password: form.password }))
     }
 
     return (

@@ -1,9 +1,12 @@
 import { useForm } from 'react-hook-form'
 import {
     Link,
+    useNavigate,
     // useNavigate
 } from 'react-router-dom'
 import { emailValidation, passwordValidation } from '@/config/validation/validation.ts'
+import { useAppDispatch } from '@/redux'
+import { signUp } from '@/redux/thunks/auth.thunk.ts'
 
 interface IFormInputs {
     name: string
@@ -16,16 +19,14 @@ export const Registration = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<IFormInputs>()
-    // const dispatch = useAppDispatch()
-    // const navigate = useNavigate()
-    const Register = async () =>
-        // { email, name, password }: IFormInputs
-        {
-            // await dispatch(signup({ email, password, name }))
-            // if (localStorage.getItem('authToken')) {
-            //     navigate('/')
-            // }
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const Register = async ({ email, name, password }: IFormInputs) => {
+        await dispatch(signUp({ email, password, name }))
+        if (localStorage.getItem('isAuth')) {
+            navigate('/')
         }
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
